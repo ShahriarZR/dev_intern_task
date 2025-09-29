@@ -58,7 +58,6 @@ switch ($action) {
             respond(['success' => false, 'message' => 'Title too long (max 255 chars)'], 422);
         }
 
-        // ✅ Check for duplicate title
         $checkStmt = mysqli_prepare($conn, 'SELECT id FROM tasks WHERE title = ?');
         if (!$checkStmt) {
             respond(['success' => false, 'message' => 'Failed to prepare duplicate check'], 500);
@@ -73,7 +72,6 @@ switch ($action) {
         }
         mysqli_stmt_close($checkStmt);
 
-        // ✅ Insert new task
         $stmt = mysqli_prepare($conn, 'INSERT INTO tasks (title) VALUES (?)');
         if (!$stmt) {
             respond(['success' => false, 'message' => 'Failed to prepare statement'], 500);
