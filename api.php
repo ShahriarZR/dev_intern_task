@@ -58,6 +58,22 @@ switch ($action) {
             respond(['success' => false, 'message' => 'Title too long (max 255 chars)'], 422);
         }
 
+        // ✅ Check for duplicate title
+        $checkStmt = mysqli_prepare($conn, 'SELECT id FROM tasks WHERE title = ?');
+        if (!$checkStmt) {
+            respond(['success' => false, 'message' => 'Failed to prepare duplicate check'], 500);
+        }
+        mysqli_stmt_bind_param($checkStmt, 's', $title);
+        mysqli_stmt_execute($checkStmt);
+        mysqli_stmt_store_result($checkStmt);
+
+        if (mysqli_stmt_num_rows($checkStmt) > 0) {
+            mysqli_stmt_close($checkStmt);
+            respond(['success' => false, 'message' => 'Task with this title already exists'], 409);
+        }
+        mysqli_stmt_close($checkStmt);
+
+        // ✅ Insert new task
         $stmt = mysqli_prepare($conn, 'INSERT INTO tasks (title) VALUES (?)');
         if (!$stmt) {
             respond(['success' => false, 'message' => 'Failed to prepare statement'], 500);
@@ -80,6 +96,7 @@ switch ($action) {
             'title'   => $title
         ], 201);
         break;
+
 
     case 'delete':
         if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
@@ -132,4 +149,4 @@ switch ($action) {
         respond(['success' => false, 'message' => 'Unknown action'], 400);
 }
 
-?> 
+?>
