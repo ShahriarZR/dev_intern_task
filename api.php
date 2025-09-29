@@ -82,20 +82,14 @@ switch ($action) {
         break;
 
     case 'delete':
-        // Enforce POST
         if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
             header('Allow: POST');
             respond(['success' => false, 'message' => 'Method Not Allowed. Use POST.'], 405);
         }
-
-        // Get id from GET ?id=, then POST form, then JSON body
         $id = null;
-
         if (isset($_GET['id'])) {
             $id = (int) $_GET['id'];
         } elseif (isset($_POST['id'])) {
-            // For this to work, client must send header:
-            // Content-Type: application/x-www-form-urlencoded
             $id = (int) $_POST['id'];
         } else {
             $raw = file_get_contents('php://input');
