@@ -2,7 +2,7 @@
 
 A tiny task-tracking API built with plain PHP (mysqli) and MySQL. The repository is optimized for local development on XAMPP (Windows) and exposes a small HTTP API to list, add, and delete tasks.
 
-Live demo / deployed project: https://office-task-tracker.infinityfree.me/(hosted on InfinityFree)
+Live demo / deployed project: https://office-task-tracker.infinityfree.me/ (hosted on InfinityFree)
 
 ## Contents
 
